@@ -2,6 +2,7 @@ import requests
 import xmltodict
 import datetime
 import mpu
+import networkx as nx
 from Vehicle import Vehicle
 
 if __name__ == '__main__':
