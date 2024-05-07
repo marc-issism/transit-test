@@ -5,6 +5,11 @@ import mpu
 import networkx as nx
 from Vehicle import Vehicle
 
+
+# TTC vehicle data: https://webservices.umoiq.com/service/publicXMLFeed?command=vehicleLocations&a=ttc
+# TTC stop data: https://webservices.umoiq.com/service/publicXMLFeed?command=routeConfig&a=ttc&r=905
+# TTC route data: https://webservices.umoiq.com/service/publicXMLFeed?command=routeList&a=ttc
+
 if __name__ == '__main__':
     url = "https://webservices.umoiq.com/service/publicXMLFeed?command=vehicleLocations&a=ttc"
     response = requests.get(url)
