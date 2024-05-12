@@ -34,4 +34,6 @@ if __name__ == '__main__':
     #print(tt.get_branches('68'))
 
     print(tt.get_prediction('8586'))
+    print('-------------------------------------')
+    print(tt.get_prediction('15116'))
 

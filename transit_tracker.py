@@ -68,16 +68,21 @@ def get_stop_list():
 
 
 def get_prediction(stop_id: int) -> str:
+    """Return the routes and the next vehicles for a given stop. Each term is separated
+    by a comma (,)."""
     response = requests.get(URL + 'predictions&a=ttc&stopId=' + stop_id)
     data = xmltodict.parse(response.content)
 
     prediction_list = ''
 
-    for route in data['body']['predictions']['direction']:
-        route_name = route['@title']
-        prediction_list = prediction_list + ',' + route_name
-        for vehicle in route['prediction']:
-            if int(vehicle['@minutes']) <= 60:
-                prediction_list = prediction_list + ',' + vehicle['@minutes'] + ' minutes'          
+    try: 
+        for route in data['body']['predictions']['direction']:
+            print(route['@title'])
+    except: # A TypeError would have been raised because 'route' would become a string in the case of inactive routes.
+        for route in data['body']['predictions']:
+            if 'direction' in route.keys():
+                print(route['direction']['@title'])
+            else:
+                print(route['@routeTitle'])
     
     return prediction_list[1:]
