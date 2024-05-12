@@ -3,8 +3,6 @@ import xmltodict
 import datetime
 import mpu
 import networkx as nx
-from Vehicle import Vehicle
-from Route import Route
 import transit_tracker as tt
 
 
