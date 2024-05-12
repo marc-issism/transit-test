@@ -4,6 +4,8 @@ import datetime
 import mpu
 import networkx as nx
 from Vehicle import Vehicle
+from Route import Route
+import transit_tracker as tt
 
 
 # TTC vehicle data: https://webservices.umoiq.com/service/publicXMLFeed?command=vehicleLocations&a=ttc
@@ -18,24 +20,18 @@ if __name__ == '__main__':
 
     #print(data["body"]["vehicle"])
 
-    route_number = input("What route number are you looking for? ")
 
-    route_count = 0
 
-    vehicles = []
+    #currernt_time = datetime.datetime.fromtimestamp( int(time)/1000)
 
-    for vehicle in data["body"]["vehicle"]:
-        if vehicle["@routeTag"] == route_number:
-            print(vehicle["@lat"], " ", vehicle["@lon"])
-            route_count += 1
-            new = Vehicle(vehicle["@dirTag"])
-            vehicles.append(new)
+    #tt.print_route_list()
+    ##print(tt.get_num_of_vehicles_on_route('68', 'A'))
+    ##print(tt.get_num_of_vehicles_on_route('68', ''))
 
-    time = data["body"]["lastTime"]["@time"]
+    #print(tt.get_route_list())
 
-    currernt_time = datetime.datetime.fromtimestamp( int(time)/1000)
-    print("Current time: ", currernt_time)
-    print("Vehicle count: ", route_count, " for route ", route_number)
+    #print(tt.get_num_of_vehicles('501', 'b'))
+    #print(tt.get_branches('68'))
 
-    for bus in vehicles:
-        print(bus.compassHeading)
+    print(tt.get_prediction('8586'))
+
