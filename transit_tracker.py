@@ -1,6 +1,8 @@
 import requests
 import xmltodict
 
+#TODO: add int, string guard asserters to function calls
+
 URL = 'https://webservices.umoiq.com/service/publicXMLFeed?command='
 
 
@@ -28,10 +30,16 @@ def get_route_list() -> str:
 def get_num_of_vehicles(route_num: str, branch: str) -> int:
     """Return the number of buses currently serving the given route number 'route_num'.
     The 'branch' parameter refers to a specific branch of the route, leave as an empty 
-    string to get all the vehicles on a route. Returns 0 if branch does not exist or if there
-    are no vehicles currently on the route, otherwise return -1 if route is not active.
+    string to get all the vehicles on a route. If 'route_num' is 0, all routes will be counted.
+    Returns 0 if branch does not exist or if there are no vehicles currently on the route, 
+    otherwise return -1 if route is not active.
     """
-    response = requests.get(URL + 'vehicleLocations&a=ttc&r=' + route_num + '&t=0')
+
+    if route_num == '0':
+        response = requests.get(URL + 'vehicleLocations&a=ttc')
+        branch = ''
+    else:
+        response = requests.get(URL + 'vehicleLocations&a=ttc&r=' + route_num + '&t=0')
     data = xmltodict.parse(response.content)
     count = 0
     route_num = '_' + route_num + str.upper(branch)
@@ -83,32 +91,44 @@ def get_prediction(stop_id: int) -> str:
     try:
         stop_title = data['body']
         print(stop_title['predictions'][0]['@stopTitle'])
+        prediction_list = prediction_list + ',' + stop_title['predictions'][0]['@stopTitle']
     except KeyError:
         print(stop_title['predictions']['@stopTitle'])
+        prediction_list = prediction_list + ',' + stop_title['predictions']['@stopTitle']
 
     try:
         for route in data['body']['predictions']:
             # Active but no predictions
             if '@dirTitleBecauseNoPredictions' in route.keys():
                 print(route['@dirTitleBecauseNoPredictions'])
+                prediction_list = prediction_list + ',' + route['@dirTitleBecauseNoPredictions']
             # Active with predictions
             elif 'direction' in route.keys(): 
                 print(route['direction']['@title'])
+                prediction_list = prediction_list + ',' + route['direction']['@title']
                 # Multiple predictions
                 if isinstance(route['direction']['prediction'], list):
                     for time in route['direction']['prediction']:
                         print(time['@minutes'] + ' minutes')
+                        prediction_list = prediction_list + ',' + time['@minutes'] + ' minutes'
                 # Only one prediction
                 else:
                     print(route['direction']['prediction']['@minutes'] + ' minutes')
+                    prediction_list = prediction_list + ',' + route['direction']['prediction']['@minutes'] + ' minutes'
             # Inactive
             else: 
                 print(route['@routeTitle'])
+                prediction_list = prediction_list + ',' + route['@routeTitle']
     except AttributeError: # Stop has only active routes
         print(data['body']['predictions']['direction']['@title'])
         for route in data['body']['predictions']['direction']['prediction']:
             print(route['@minutes'] + ' minutes')
+            prediction_list = prediction_list + ',' + route['@minutes'] + ' minutes'
 
-
-    
     return prediction_list[1:]
+
+
+def get_frequency(route_num: str, branch: str) -> int:
+    return -1
+
+
