@@ -80,14 +80,35 @@ def get_prediction(stop_id: int) -> str:
 
     prediction_list = ''
 
-    try: 
-        for route in data['body']['predictions']['direction']:
-            print(route['@title'])
-    except: # A TypeError would have been raised because 'route' would become a string in the case of inactive routes.
+    try:
+        stop_title = data['body']
+        print(stop_title['predictions'][0]['@stopTitle'])
+    except KeyError:
+        print(stop_title['predictions']['@stopTitle'])
+
+    try:
         for route in data['body']['predictions']:
-            if 'direction' in route.keys():
+            # Active but no predictions
+            if '@dirTitleBecauseNoPredictions' in route.keys():
+                print(route['@dirTitleBecauseNoPredictions'])
+            # Active with predictions
+            elif 'direction' in route.keys(): 
                 print(route['direction']['@title'])
-            else:
+                # Multiple predictions
+                if isinstance(route['direction']['prediction'], list):
+                    for time in route['direction']['prediction']:
+                        print(time['@minutes'] + ' minutes')
+                # Only one prediction
+                else:
+                    print(route['direction']['prediction']['@minutes'] + ' minutes')
+            # Inactive
+            else: 
                 print(route['@routeTitle'])
+    except AttributeError: # Stop has only active routes
+        print(data['body']['predictions']['direction']['@title'])
+        for route in data['body']['predictions']['direction']['prediction']:
+            print(route['@minutes'] + ' minutes')
+
+
     
     return prediction_list[1:]
