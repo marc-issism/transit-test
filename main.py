@@ -28,7 +28,9 @@ if __name__ == '__main__':
 
     #print(tt.get_route_list())
 
-    #print(tt.get_num_of_vehicles('501', 'b'))
+    #print(tt.get_num_of_vehicles('68', 'a'))
+    #print(tt.get_num_of_vehicles('995', ''))
+    #print(tt.get_num_of_vehicles('38', ''))
     #print(tt.get_branches('68'))
 
     print(tt.get_prediction('8586'))

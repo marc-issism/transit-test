@@ -29,23 +29,28 @@ def get_num_of_vehicles(route_num: str, branch: str) -> int:
     """Return the number of buses currently serving the given route number 'route_num'.
     The 'branch' parameter refers to a specific branch of the route, leave as an empty 
     string to get all the vehicles on a route. Returns 0 if branch does not exist or if there
-    are no vehicles currently on the route.
+    are no vehicles currently on the route, otherwise return -1 if route is not active.
     """
     response = requests.get(URL + 'vehicleLocations&a=ttc&r=' + route_num + '&t=0')
     data = xmltodict.parse(response.content)
     count = 0
     route_num = '_' + route_num + str.upper(branch)
 
-    # Branch not empty string
-    if branch != '':
-        for vehicle in data['body']['vehicle']:
-            if '@dirTag' in vehicle.keys():
-                if route_num in vehicle['@dirTag']:
-                    count += 1
-    else:
-        for vehicle in data['body']['vehicle']:
-            if vehicle['@predictable'] == 'true':
-                count += 1  
+    try:
+        # Branch is specified
+        if branch != '':
+            for vehicle in data['body']['vehicle']:
+                if '@dirTag' in vehicle.keys():
+                    if route_num in vehicle['@dirTag']:
+                        count += 1
+        # Branch is not specified
+        else:
+            for vehicle in data['body']['vehicle']:
+                if vehicle['@predictable'] == 'true':
+                    count += 1 
+    except KeyError:
+        #print("Route " + route_num[1:] + " is not currently active.")
+        return -1
 
     return count
 
