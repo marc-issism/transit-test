@@ -34,22 +34,13 @@ if __name__ == '__main__':
     #print(tt.get_branches('68'))
 
 
-    """
-    #print('A stop with one active route and inactive routes')
-    tt.get_prediction('15116')
-    print('-------------------------------------')
-    #print('A stop with one active route')
-    tt.get_prediction('8586')
-    print('-------------------------------------')
-    #print('A stop with two active routes and one inactive route')
-    tt.get_prediction('15336')
-    print('-------------------------------------')
-    #print('A stop with five active routes, but one route with NO predictions')
-    test2 = tt.get_prediction('16373')
-    print('-------------------------------------')
-    test = tt.get_prediction('8478')
-    print('-------------------------------------')
-    print(test2)
-    """
+    
 
-    print(tt.get_num_of_vehicles('510',''))
+    #print('A stop with one active route and inactive routes')
+
+
+    tt.get_prediction('16373')
+
+
+
+    
