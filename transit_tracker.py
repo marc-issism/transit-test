@@ -14,7 +14,6 @@ def print_route_list() -> None:
     for route in data['body']['route']:
         print(route['@title'])
 
-
 def get_route_list() -> str:
     """Return every route separated by a comma (,). """
     response = requests.get(URL + 'routeList&a=ttc')
@@ -79,7 +78,8 @@ def get_branches(route_num: str) -> str:
 def get_stop_list():
     return None
 
-
+#TODO: append to prediction list
+#TODO: account for invalid stops
 def get_prediction(stop_id: int) -> str:
     """Return the routes and the next vehicles for a given stop. Each term is separated
     by a comma (,)."""
@@ -105,15 +105,15 @@ def get_prediction(stop_id: int) -> str:
             else:
                 if '@dirTitleBecauseNoPredictions' in route.keys():
                     print(route['@dirTitleBecauseNoPredictions'])
-                elif isinstance(route['direction'], list):
+                elif isinstance(route['direction'], list): # Multiple routes w/ branches
                     for direction in route['direction']:
                         print(direction['@title'])
-                        if isinstance(direction['prediction'], dict):
+                        if isinstance(direction['prediction'], dict): # One prediction
                             print(direction['prediction']['@minutes'] + ' minutes')
-                        if isinstance(direction['prediction'], list):
+                        if isinstance(direction['prediction'], list): # Multiple predictions
                             for prediction in direction['prediction']:
                                 print(prediction['@minutes'] + ' minutes')
-                elif isinstance(route['direction'], dict): 
+                elif isinstance(route['direction'], dict): # Multiple routes w/o branches
                     print(route['direction']['@title'])
                     for prediction in route['direction']['prediction']:
                         print(prediction['@minutes'] + ' minutes') 
@@ -133,26 +133,14 @@ def get_prediction(stop_id: int) -> str:
                 print(route['@dirTitleBecauseNoPredictions'])
             else:
                 print(route['@title'])
-                if isinstance(route['prediction'], dict):
+                if isinstance(route['prediction'], dict): # One prediction
                     print(route['prediction']['@minutes'] + ' minutes')
-                if isinstance(route['prediction'], list):
+                if isinstance(route['prediction'], list): # Multiple predictions
                     for prediction in route['prediction']:
                         print(prediction['@minutes'] + ' minutes')
 
     return prediction_list[1:]
 
-def branch_route(route: dict):
-    print(route['@title'])
-    if isinstance(route['prediction'], dict):
-        print(route['prediction']['@minutes'] + ' minutes')
-    if isinstance(route['prediction'], list):
-        for prediction in route['prediction']:
-            print(prediction['@minutes'] + ' minutes')
-
-def no_branch_route(route: dict):
-    print(route['direction']['@title'])
-    for prediction in route['direction']['prediction']:
-        print(prediction['@minutes'] + ' minutes')
 
 def get_frequency(route_num: str, branch: str) -> int:
     return -1

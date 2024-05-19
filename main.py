@@ -21,25 +21,13 @@ if __name__ == '__main__':
 
 
     #currernt_time = datetime.datetime.fromtimestamp( int(time)/1000)
-
-    #tt.print_route_list()
-    ##print(tt.get_num_of_vehicles_on_route('68', 'A'))
-    ##print(tt.get_num_of_vehicles_on_route('68', ''))
-
-    #print(tt.get_route_list())
-
-    #print(tt.get_num_of_vehicles('68', 'a'))
-    #print(tt.get_num_of_vehicles('995', ''))
-    #print(tt.get_num_of_vehicles('38', ''))
-    #print(tt.get_branches('68'))
+ 
+    tt.get_prediction('8587')
+    print('-----------------------')
+    #tt.get_prediction('16373')
 
 
-    
 
-    #print('A stop with one active route and inactive routes')
-
-
-    tt.get_prediction('16373')
 
 
 
